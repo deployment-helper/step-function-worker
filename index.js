@@ -28,7 +28,7 @@ exports.handler = async event => {
       data = {
         access_token: event.access_token,
         project_name: event.project_name,
-        vcs: event.vcs,
+        vcs_type: event.vcs_type,
         user_name: event.user_name
       };
       resp = await axios.post(
@@ -40,7 +40,7 @@ exports.handler = async event => {
       data = {
         access_token: event.access_token,
         project_name: event.project_name,
-        vcs: event.vcs,
+        vcs_type: event.vcs_type,
         user_name: event.user_name,
         variables: event.variables
       };
