@@ -7,61 +7,69 @@ const APIKEY = process.env.APIKEY;
 exports.handler = async event => {
   let resp;
   let data;
-  switch (event.action) {
-    case "RC_CREATE_GITHUB":
-      data = {
-        access_token: event.access_token,
-        repo_name: event.repo_name
-      };
-      resp = await axios.post(`/repo-creation-github/?apikey=${APIKEY}`, data);
-      console.log(resp);
-      break;
-    case "RU_COMMIT_GITHUB":
-      data = {
-        source_access_token: event.source_access_token,
-        destination_access_token: event.destination_access_token,
-        source_repo_url: event.source_repo_url,
-        destination_repo_url: event.destination_repo_url
-      };
-      resp = await axios.post(`/repo-first-commit/?apikey=${APIKEY}`, data);
-      console.log(resp);
-      break;
-    case "RC_CREATE_CIRCLECI":
-      data = {
-        access_token: event.access_token,
-        project_name: event.project_name,
-        vcs_type: event.vcs_type,
-        user_name: event.user_name
-      };
-      resp = await axios.post(
-        `/pipeline-circle-ci-follow/?apikey=${APIKEY}`,
-        data
-      );
-      console.log(resp);
-      break;
-    case "RU_ENVVAR_CIRCLECI":
-      data = {
-        access_token: event.access_token,
-        project_name: event.project_name,
-        vcs_type: event.vcs_type,
-        user_name: event.user_name,
-        variables: event.variables
-      };
-      resp = await axios.post(
-        `/pipeline-circleci-variables/?apikey=${APIKEY}`,
-        data
-      );
-      console.log(resp);
-      break;
-    default:
-      resp = {
-          data:{
+  try {
+    switch (event.action) {
+      case "RC_CREATE_GITHUB":
+        data = {
+          access_token: event.access_token,
+          repo_name: event.repo_name
+        };
+        resp = await axios.post(
+          `/repo-creation-github/?apikey=${APIKEY}`,
+          data
+        );
+        console.log(resp);
+        break;
+      case "RU_COMMIT_GITHUB":
+        data = {
+          source_access_token: event.source_access_token,
+          destination_access_token: event.destination_access_token,
+          source_repo_url: event.source_repo_url,
+          destination_repo_url: event.destination_repo_url
+        };
+        resp = await axios.post(`/repo-first-commit/?apikey=${APIKEY}`, data);
+        console.log(resp);
+        break;
+      case "RC_CREATE_CIRCLECI":
+        data = {
+          access_token: event.access_token,
+          project_name: event.project_name,
+          vcs_type: event.vcs_type,
+          user_name: event.user_name
+        };
+        resp = await axios.post(
+          `/pipeline-circle-ci-follow/?apikey=${APIKEY}`,
+          data
+        );
+        console.log(resp);
+        break;
+      case "RU_ENVVAR_CIRCLECI":
+        data = {
+          access_token: event.access_token,
+          project_name: event.project_name,
+          vcs_type: event.vcs_type,
+          user_name: event.user_name,
+          variables: event.variables
+        };
+        resp = await axios.post(
+          `/pipeline-circleci-variables/?apikey=${APIKEY}`,
+          data
+        );
+        console.log(resp);
+        break;
+      default:
+        resp = {
+          data: {
             status: 400,
-        desc: "action not supported"
+            desc: "action not supported"
           }
-      };
-      console.log(resp);
+        };
+        console.log(resp);
+    }
+    console.log(resp.data);
+    return resp.data;
+  } catch (error) {
+    console.log(error);
+    return error;
   }
-  console.log(resp.data);
-  return resp.data;
 };
