@@ -1,5 +1,6 @@
 require("dotenv").config();
 const Axios = require("axios");
+const util = require("util");
 const axios = Axios.create({
   baseURL: "https://vinaymavi-91108825-eval-test.apigee.net/"
 });
@@ -18,7 +19,22 @@ exports.handler = async event => {
           `/repo-creation-github/?apikey=${APIKEY}`,
           data
         );
-        console.log(resp);
+        try {
+          console.log("REQ STATUS START");
+          console.log(resp.data.body.data.data);
+          console.log(resp.data.body.data.data.clone_url);
+          console.log(resp.data.body.data.data.owner.login);
+          console.log("REQ STATUS END");
+          resp = {
+            data: {
+              clone_url: resp.data.body.data.data.clone_url,
+              user: resp.data.body.data.data.owner.login
+            }
+          };
+        } catch (err) {
+          console.error(err);
+        }
+
         break;
       case "RU_COMMIT_GITHUB":
         data = {
