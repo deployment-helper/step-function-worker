@@ -41,7 +41,8 @@ exports.handler = async event => {
           source_access_token: event.source_access_token,
           destination_access_token: event.destination_access_token,
           source_repo_url: event.source_repo_url,
-          destination_repo_url: event.destination_repo_url
+          destination_repo_url: event.destination_repo_url,
+          context:event.context
         };
         resp = await axios.post(`/repo-first-commit/?apikey=${APIKEY}`, data);
         console.log(resp);
